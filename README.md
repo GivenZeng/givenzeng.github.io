@@ -1,3 +1,5 @@
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
 # 阅读
 - [局外人](./阅读/局外人.html)
 - [圣殿春秋](./阅读/圣殿春秋.html)
