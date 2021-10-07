@@ -27,8 +27,11 @@
 - [链接](./计算机/链接.html)
 - [插桩](./计算机/插桩.html)
 - [异常](./计算机/异常.html)
+- [虚拟内存](./计算机/虚拟内存.html)
 
 
+推荐阅读：
+- [《深入理解操作系统-CSAPP》](https://hansimov.gitbook.io/csapp/part2/ch09-virtual-memory/9.10-garbage-collection)
 
 # 数据库
 - [redis](./数据库/redis.html)
