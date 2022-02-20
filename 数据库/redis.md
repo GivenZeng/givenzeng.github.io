@@ -208,7 +208,7 @@ redis的复制功能分为同步和命令传播两个操作：
 - 从服务器想主服务器发送sync命令
 - 主服务器收到sync命令后，执行bgsave生成rdb，并将bgsave过程中执行的写命令写入一个缓冲区buf
 - 主服务器bgsave完成后，将rdb发送给从服务器；从服务器加载rdb
-- 主服务器将buf发送给从服务器；从服务执行bug里的写命令
+- 主服务器将buf发送给从服务器；从服务执行buf里的写命令
 
 &#8195;&#8195;当主服务器状态发生变更（如执行了del等写命令），就会造成主从状态不一致。此时，主服务器会将写命令传播给从服务器。
 
@@ -261,7 +261,7 @@ sentinel auth-pass redis-master 123456
 logfile "/data/bd./source/sentinel/sentinel.log"
 ```
 
-&#8195;&#8195;多个sentinel实例会从其监控的master节点获知其他sentinel的存在（通过命令连接、订阅连接，类似于广播）；通过向master发送info命令知道slave的存在。因此多个sentinel可以共用一份配置文件（只要用不同的ip/机器或者机器就好）。每个sentinel实例都一个一个masters、slaves数组存储它所知道的redis节点。
+&#8195;&#8195;多个sentinel实例会从其监控的master节点获知其他sentinel的存在（通过命令连接、订阅连接，类似于广播）；通过向master发送info命令知道slave的存在。因此多个sentinel可以共用一份配置文件（只要用不同的ip/机器或者机器就好）。每个sentinel实例都有一个masters、slaves数组存储它所知道的redis节点。
 
 
 <p align="center">
@@ -327,7 +327,7 @@ cluster keyslot key_name
 - 查询的key不是本节点负责的时候，会返回moved target_host target_port给客户端，让客户端将命令重新发送到target_host target_port（负责该槽的节点），并且，后续该客户端对该槽的所有的请求都会直接到目标节点（负责该槽的节点），不再查询本节点
 - 在slot迁移的过程中，可能存在一个slot的key存放在两个不同的节点的情况。此时如果本节点找不到对应的key，会返回ack target_host target_port给客户端，让客户端尝试查询target_host target_port。但是下次该槽的请求仍然会到达本节点。
 
-&#8195;&#8195;如果某个主节点down了，从节点会自动升级为主节点。当down了的主节点恢复正常，会重新进入集群，作为从节点。每个节点都有一个nodes数据来记录集群中的所有节点。当使用cluster meet增加新节点，redis会使用gossip协议将新节点的消息传播给集群中的其他节点，让其他节点也与新节点进行握手。使用cluster meet的节点默认都将成为master，并且没有分配到clost，无法起作用，因此还需要将slot分配给新节点，本文暂不讲解。
+&#8195;&#8195;如果某个主节点down了，从节点会自动升级为主节点。当down了的主节点恢复正常，会重新进入集群，作为从节点。每个节点都有一个nodes数据来记录集群中的所有节点。当使用cluster meet增加新节点，redis会使用gossip协议将新节点的消息传播给集群中的其他节点，让其他节点也与新节点进行握手。使用cluster meet的节点默认都将成为master，并且没有分配到slot，无法起作用，因此还需要将slot分配给新节点，本文暂不讲解。
 ```
 // 将当前节点设置为某个节点的从节点
 cluster replicate 92fd15d6f67f3944ce241dc99217b4844313c9e4
