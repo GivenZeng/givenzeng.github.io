@@ -25,6 +25,7 @@
   - [插桩](./计算机/插桩.html)
   - [异常](./计算机/异常.html)
   - [虚拟内存](./计算机/虚拟内存.html)
+  - [决策树](./计算机/决策树.html)
 - 2019
   - [多路复用](./计算机/多路复用.html)
   - [分布式锁](./计算机/分布式锁.html)
@@ -33,12 +34,14 @@
   - [go的routine](./计算机/go的routine.html)
   - [go的sync](./计算机/go的sync.html)
   - [go的编译过程](./计算机/go的编译过程.html)
+  - [服务控制supervisor](./计算机/工具/supervisor.html)
   - [ksql](./计算机/ksql.html)
   - [spark](./计算机/spark.html)
   - [python虚拟环境virtualenv](./计算机/python的virtualenv.html)
   - [流量控制和拥塞控制](./计算机/流量控制和拥塞控制.html)
   - [docker概述](./计算机/docker概述.html)
   - [负载均衡](./计算机/负载均衡.html)
+  - [压力测试](./计算机/压力测试.html)
 
 
 推荐阅读：
