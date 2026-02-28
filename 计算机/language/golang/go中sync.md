@@ -10,6 +10,11 @@ golang的原语:atomic、sync。
 
 本篇将简单介绍golang的sync库。含sync.map, sync/atomic
 
+### sync/Mutex
+runtime：cas、自旋
+linux futex：cas、cas失败后才wait，当其他M 调用futex的release，会唤醒被挂起的M
+futex性能优于SystemV、POSIX
+
 ### sync/atomic
 atomic 是golang对于一些基础数据类型的同步操作的实现。官方的基本介绍如下：
 ```
@@ -40,6 +45,9 @@ TEXT ·CompareAndSwapUint64(SB),NOSPLIT,$0-25
 ```
 可见，对于atomic函数的具体实现是和系统架构相关的（不同的体系架构有不同的指令集）。当编译golang程序的时候，会将CompareAndSwapInt64函数链接到该机器指令。相较于使用系统级的锁，直接使用机器指令进行原子操作消耗更小（无需系统陷入等一系列系统操作）。
 
+LOCK 前缀指令（注意：它不是独立指令，是指令前缀）的作用 —— 它是 x86 CPU 提供的 “原子性保障开关”，核心作用是让后续的内存操作指令（如 CMPXCHGQ、ADD、XCHG）在多核心场景下具备全局原子性，是多核 CPU 同步的底层硬件基础。
+- 早期实现：总线锁定（Bus Lock），其他核无法无法运行
+- 现代实现：缓存锁定（Cache Lock），其他核只要不写该缓存行，则可以继续运行
 
 ### sync.Map
 go 语言中的map并不是并发安全的，在Go 1.6之前，并发读写map会导致读取到脏数据，在1.6之后则程序直接panic。因此之前的解决方案一般都是通过引入RWMutex(读写锁)进行处理，关于go为什么不支持map的原子操作，概况来说，对map原子操作一定程度上降低了只有并发读，或不存在并发读写等场景的性能。
